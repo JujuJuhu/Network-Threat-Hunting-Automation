@@ -8,15 +8,16 @@ Feed it a PCAP. Get back enriched alerts, geo-ASN attribution, Zeek protocol con
 ## Pipeline Overview
 
 PCAP
-│
-├─► [suricata_run] Eve.json alert stream
-├─► [zeek_run] Protocol logs (conn, dns, http, ssl, files, weird …)
-├─► [python_asngeo] GeoIP2 + ASN enrichment → eve_extra.json
-├─► [python_correlate] Community-ID join → correlated.json
-├─► [python_report_alerts] Per-alert Markdown report
-├─► [python_report_stats] Aggregated statistics report
-├─► [report_final] Combined FINAL_REPORT.md
-└─► [cleanup] Temp file removal
+ │
+ ├──► [initial]                 Setup and pre-run checks
+ ├──► [suricata_run]            Generate eve.json alert stream
+ ├──► [zeek_run]                Generate protocol logs (conn, dns, http, ssl, files, weird …)
+ ├──► [python_asngeo]           GeoIP2 + ASN enrichment → eve_extra.json
+ ├──► [python_correlate]        Community-ID join → correlated.json
+ ├──► [python_report_alerts]    Per-alert Markdown report → alerts_report.md
+ ├──► [python_report_stats]     Aggregated statistics → stats_report.md
+ ├──► [report_final]            Merge into FINAL_REPORT.md
+ └──► [cleanup]                 Remove temporary files
 
 
 ---
@@ -37,46 +38,45 @@ PCAP
 
 PCAPS/
 ├── ansible/
-│ ├── playbook.yml
-│ ├── inventory/
-│ │ └── hosts.yml
-│ └── roles/
-│ ├── initial/
-│ ├── suricata_run/
-│ ├── zeek_run/
-│ ├── python_asngeo/
-│ ├── python_correlate/
-│ ├── python_report_alerts/
-│ ├── python_report_stats/
-│ ├── report_final/
-│ └── cleanup/
+│   ├── playbook.yml
+│   ├── inventory/
+│   │   └── hosts.yml
+│   └── roles/
+│       ├── initial/
+│       ├── suricata_run/
+│       ├── zeek_run/
+│       ├── python_asngeo/
+│       ├── python_correlate/
+│       ├── python_report_alerts/
+│       ├── python_report_stats/
+│       ├── report_final/
+│       └── cleanup/
 ├── python_asngeo/
-│ └── geo-asn.py
+│   └── geo-asn.py
 ├── python_correlate/
-│ └── correlate.py
+│   └── correlate.py
 ├── python_report_alerts/
-│ └── alerts-report.py
+│   └── alerts-report.py
 ├── python_report_stats/
-│ └── stats-report.py
+│   └── stats-report.py
 ├── report_final/
-│ └── join-reports.py
-├── LOGS/
-│ ├── suricata/<pcap_name>/
-│ │ ├── eve.json
-│ │ └── eve_extra.json ← enriched
-│ └── zeek/<pcap_name>/
-│ ├── conn.log
-│ ├── dns.log
-│ ├── http.log
-│ └── …
-├── RESULTS/<pcap_name>/
-│ ├── correlated.json
-│ ├── alerts_report.md
-│ ├── stats_report.md
-│ └── FINAL_REPORT.md
+│   └── join-reports.py
+├── LOGS/                          ← gitignored
+│   ├── suricata/<pcap_name>/
+│   │   ├── eve.json
+│   │   └── eve_extra.json         ← enriched
+│   └── zeek/<pcap_name>/
+│       ├── conn.log
+│       ├── dns.log
+│       ├── http.log
+│       └── ...
+├── RESULTS/<pcap_name>/           ← gitignored
+│   ├── correlated.json
+│   ├── alerts_report.md
+│   ├── stats_report.md
+│   └── FINAL_REPORT.md
 └── PCAPS/
-└── *.pcap
-
+    └── *.pcap                     ← gitignored
 
 ---
 
