@@ -106,7 +106,7 @@ pip3 install geoip2
 ```bash
 # Drop a PCAP in the PCAPS/ folder, then:
 cd ansible
-ansible-playbook playbook.yml -i inventory/hosts.yml
+ansible-playbook playbook.yml
 
 # Output lands in:
 #   RESULTS/<pcap_name>/FINAL_REPORT.md
