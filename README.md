@@ -7,6 +7,7 @@ Feed it a PCAP. Get back enriched alerts, geo-ASN attribution, Zeek protocol con
 
 ## Pipeline Overview
 
+```
 PCAP
  │
  ├──► [initial]                 Setup and pre-run checks
@@ -18,24 +19,11 @@ PCAP
  ├──► [python_report_stats]     Aggregated statistics → stats_report.md
  ├──► [report_final]            Merge into FINAL_REPORT.md
  └──► [cleanup]                 Remove temporary files
-
-
----
-
-## Prerequisites
-
-| Tool | Version | Notes |
-|------|---------|-------|
-| Ansible | ≥ 2.17 | Controller node |
-| Suricata | ≥ 8.0 | Must be installed on `analysis` host |
-| Zeek | ≥ 9.0 | Requires JSON log output mode |
-| Python | ≥ 3.10 | With `geoip2` package |
-| MaxMind GeoLite2 | Any | ASN, Country, City `.mmdb` at `/opt/geoip/` |
-
----
+```
 
 ## Directory Structure
 
+```
 PCAPS/
 ├── ansible/
 │   ├── playbook.yml
@@ -77,6 +65,19 @@ PCAPS/
 │   └── FINAL_REPORT.md
 └── PCAPS/
     └── *.pcap                     ← gitignored
+```
+
+---
+
+## Prerequisites
+
+| Tool | Version | Notes |
+|------|---------|-------|
+| Ansible | ≥ 2.17 | Controller node |
+| Suricata | ≥ 8.0 | Must be installed on `analysis` host |
+| Zeek | ≥ 9.0 | Requires JSON log output mode |
+| Python | ≥ 3.10 | With `geoip2` package |
+| MaxMind GeoLite2 | Any | ASN, Country, City `.mmdb` at `/opt/geoip/` |
 
 ---
 
