@@ -85,7 +85,7 @@ PCAPS/
 
 ```bash
 # Clone
-git clone https://github.com/<your-username>/pcap-threat-hunting.git
+git clone https://github.com/JujuJuhu/Network-Threat-Hunting-Automation.git
 cd pcap-threat-hunting
 
 # Create required directories
