@@ -88,10 +88,9 @@ PCAPS/
 git clone https://github.com/<your-username>/pcap-threat-hunting.git
 cd pcap-threat-hunting
 
-**2. Create required directories**
+**Create required directories**
 ```bash
 mkdir -p PCAPS/TODO PCAPS/DONE PCAPS/LOGS PCAPS/RESULTS
-```
 
 # Install Python dependency (system or venv)
 pip3 install geoip2
