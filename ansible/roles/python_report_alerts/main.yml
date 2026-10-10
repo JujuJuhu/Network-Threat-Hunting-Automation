@@ -1,0 +1,25 @@
+---
+# ------------------------------------------
+# Verify report script exists
+# ------------------------------------------
+
+- name: Check report script exists
+  find:
+    paths: "{{ playbook_dir }}/../python_report_alerts/"
+    patterns: alerts-report.py
+  register: report_script
+
+- name: Fail if report script is missing
+  fail:
+    msg: "alerts-report.py not found"
+  when: report_script.matched == 0
+
+# ------------------------------------------
+# Generate alerts report
+# ------------------------------------------
+
+- name: Generate alerts report
+  command: python3 {{ playbook_dir }}/../python_report_alerts/alerts-report.py
+  args:
+    chdir: "{{ playbook_dir }}/../python_report_alerts/"
+  changed_when: true

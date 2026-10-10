@@ -1,0 +1,40 @@
+# ---------------------------------
+# Ensure prerequisites
+# ---------------------------------
+- name: Ensure current_pcap is defined
+  assert:
+    that:
+      - current_pcap is defined
+    fail_msg: "current_pcap is not defined. Cannot finalize PCAP"
+
+# ---------------------------------
+# Derive PCAP name
+# ---------------------------------
+- name: Extract PCAP filename
+  set_fact:
+    pcap_name: "{{ current_pcap | basename }}"
+
+# ---------------------------------
+# Move PCAP to DONE
+# ---------------------------------
+- name: Move PCAP to DONE directory
+  command: >
+    mv {{ current_pcap }}
+    {{ playbook_dir }}/../DONE/{{ pcap_name }}
+  args:
+    creates: "{{ playbook_dir }}/../DONE/{{ pcap_name }}"
+  register: move_result
+  changed_when: true
+
+# ---------------------------------
+# Confirm move
+# ---------------------------------
+- name: Confirm PCAP moved to DONE
+  stat:
+    path: "{{ playbook_dir }}/../DONE/{{ pcap_name }}"
+  register: done_pcap
+
+- name: Fail if PCAP was not moved
+  fail:
+    msg: "PCAP {{ pcap_name }} was not moved to DONE."
+  when: not done_pcap.stat.exists

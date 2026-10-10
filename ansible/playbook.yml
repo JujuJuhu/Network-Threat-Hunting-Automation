@@ -1,0 +1,14 @@
+- name: PCAP analysis pipeline
+  hosts: analysis
+  gather_facts: False
+  
+  roles:
+    - initial
+    - suricata_run
+    - zeek_run
+    - python_asngeo
+    - python_correlate
+    - python_report_alerts
+    - python_report_stats
+    - report_final
+    - cleanup

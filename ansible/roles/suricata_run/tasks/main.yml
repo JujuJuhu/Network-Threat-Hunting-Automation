@@ -1,0 +1,53 @@
+# ---------------------------------
+# Ensure prerequisites
+# ---------------------------------
+- name: Ensure current_pcap is defined
+  assert:
+    that:
+      - current_pcap is defined
+    fail_msg: "current_pcap is not defined. Did the preflight role run?"
+
+# ---------------------------------
+# Derive PCAP name
+# ---------------------------------
+- name: Extract PCAP filename
+  set_fact:
+    pcap_name: "{{ current_pcap | basename }}"
+
+- name: Show PCAP name
+  debug:
+    msg: "Processing PCAP with Suricata: {{ pcap_name }}"
+
+# ---------------------------------
+# Create Suricata log directory
+# ---------------------------------
+- name: Create Suricata log directory for this PCAP
+  file:
+    path: "{{ playbook_dir }}/../LOGS/suricata/{{ pcap_name }}"
+    state: directory
+    mode: '0755'
+
+# ---------------------------------
+# Run Suricata on the PCAP
+# ---------------------------------
+- name: Run Suricata on the PCAP file
+  command: >
+    suricata
+    -r {{ current_pcap }}
+    -l {{ playbook_dir }}/../LOGS/suricata/{{ pcap_name }}
+  become: true
+  register: suricata_run
+  changed_when: true
+
+# ---------------------------------
+# Validate output
+# ---------------------------------
+- name: Verify Suricata eve.json exists
+  stat:
+    path: "{{ playbook_dir }}/../LOGS/suricata/{{ pcap_name }}/eve.json"
+  register: eve_file
+
+- name: Fail if eve.json was not created
+  fail:
+    msg: "Suricata did not generate eve,json for {{ pcap_name }}"
+  when: not eve_file.stat.exists

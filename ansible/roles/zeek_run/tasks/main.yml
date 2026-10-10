@@ -1,0 +1,45 @@
+# ---------------------------------
+# Derive PCAP name
+# ---------------------------------
+- name: Extract PCAP filename
+  set_fact:
+    pcap_name: "{{ current_pcap | basename }}"
+
+- name: Show PCAP name
+  debug:
+    msg: "Processing PCAP: {{ pcap_name }}"
+
+# ---------------------------------
+# Create Zeek log directory
+# ---------------------------------
+- name: Create Zeek log directory for this PCAP
+  file:
+    path: "{{ playbook_dir }}/../LOGS/zeek/{{ pcap_name }}"
+    state: directory
+    mode: '0755'
+
+# ---------------------------------
+# Run Zeek on the PCAP
+# ---------------------------------
+- name: Run Zeek on the PCAP file
+  command: >
+    zeek
+    -r {{ current_pcap }}
+    LogAscii::use_json=T
+    Log::default_logdir={{ playbook_dir }}/../LOGS/zeek/{{ pcap_name }} local
+  register: zeek_run
+  changed_when: true
+
+# ---------------------------------
+# Basic validation
+# ---------------------------------
+- name: Verify Zeek logs were created
+  find:
+    paths: "{{ playbook_dir }}/../LOGS/zeek/{{ pcap_name }}"
+    patterns: "*.log"
+  register: zeek_logs
+
+- name: Fail if no Zeek logs were generated
+  fail:
+    msg: "Zeek  did not generate any logs for {{ pcap_name }}"
+  when: zeek_logs.matched == 0

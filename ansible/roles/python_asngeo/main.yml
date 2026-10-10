@@ -1,0 +1,42 @@
+# ------------------------------------------
+# Verify GEO-ASN enrichment script exists
+# ------------------------------------------
+
+- name: Check Suricata enrichment script exists
+  find:
+    paths: "{{ playbook_dir }}/../python_asngeo/"
+    patterns: geo-asn.py
+  register: enrich_script
+
+- name: Fail if enrichment script is missing
+  fail:
+    msg: "geo-asn.py not found in PCAPS/python_asngeo/"
+  when: enrich_script.matched == 0
+
+
+# ------------------------------------------
+# Find the Suricata eve.json file
+# ------------------------------------------
+
+- name: Find Suricata eve.json files
+  find:
+    paths: "{{ playbook_dir }}/../LOGS/Suricata"
+    patterns: eve.json
+    recurse: yes
+  register: suricata_eve_files
+
+- name: Fail if no Suricata eve.json files found
+  fail:
+    msg: "No Suricata eve.json files found to  enrich"
+  when: suricata_eve_files.matched == 0
+
+
+# ------------------------------------------
+# Find the Suricata eve.json file
+# ------------------------------------------
+
+- name: Enrich Suricata eve.json
+  command: python3 {{ playbook_dir }}/../python_asngeo/geo-asn.py
+  args:
+    chdir: "{{ playbook_dir }}/../python_asngeo"
+  changed_when: true

@@ -1,0 +1,24 @@
+# ------------------------------------------
+# Verify correlation script exists
+# ------------------------------------------
+
+- name: Check correlation script exists
+  find:
+    paths: "{{ playbook_dir }}/../python_correlate"
+    patterns: correlate.py
+  register: correlate_script
+
+- name: Fail if correlation script is missing
+  fail:
+    msg: "correlate.py not found"
+  when: correlate_script.matched == 0
+
+# ------------------------------------------
+# Run correlation script
+# ------------------------------------------
+
+- name: Correlate Zeek and Suricata logs
+  command: python3 {{ playbook_dir }}/../python_correlate/correlate.py
+  args:
+    chdir: "{{ playbook_dir }}/../python_correlate/"
+  changed_when: true

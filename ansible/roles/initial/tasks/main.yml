@@ -1,0 +1,79 @@
+# ---------------------------------
+# Load desired versions
+# ---------------------------------
+- name: Load versions.json
+  slurp:
+    src: "{{ playbook_dir }}/../versions.json"
+  register: versions_file
+
+- name: Parse versions.json
+  set_fact:
+    desired_versions: "{{ versions_file.content | b64decode | from_json }}"
+
+# ---------------------------------
+# Check installed versions
+# ---------------------------------
+- name: Get Zeek version
+  command: zeek --version
+  register: zeek_version_raw
+
+- name: Get Suricata version
+  command:  suricata --build-info | head -1
+  register: suricata_version_raw
+
+- name: Get Ansible version
+  command: ansible --version | head -1
+  register: ansible_version_raw
+
+- name: Extract Zeek version
+  set_fact:
+    zeek_version: "{{ zeek_version_raw.stdout | regex_search('([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+
+- name: Extract Suricata version
+  set_fact:
+    suricata_version: "{{ suricata_version_raw.stdout | regex_search('([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+
+- name: Extract Ansible version
+  set_fact:
+    ansible_version: "{{ ansible_version_raw.stdout | regex_search('([0-9]+\\.[0-9]+\\.[0-9]+)') }}"
+
+- name: Warn if Zeek version differs
+  debug:
+    msg: "WARNING: Zeek version mismatch. Expected {{ desired_versions.zeek.version }}, found {{ zeek_version }}"
+  when: zeek_version != desired_versions.zeek.version
+
+- name: Warn if Suricata version differs
+  debug:
+    msg: "WARNING: Suricata version mismatch. Expected {{ desired_versions.suricata.version }}, found {{ suricata_version }}"
+  when: suricata_version != desired_versions.suricata.version
+
+- name: Warn if Ansible version differs
+  debug:
+    msg: "WARNING: Ansible version mismatch. Expected {{ desired_versions.ansible.version }}, found {{ ansible_version }}"
+  when: ansible_version['string'] != desired_versions.ansible.version
+
+# ---------------------------------
+# Discover PCAPs
+# ---------------------------------
+- name: Find PCAPs in TODO directory
+  find:
+    paths: "{{ playbook_dir }}/../TODO"
+    patterns: "*.pcap"
+    file_type: file
+  register: pcap_files
+
+- name: Fail if no PCAPs found
+  fail:
+    msg: "No PCAPs files found in TODO directory."
+  when: pcap_files.matched == 0
+
+# ---------------------------------
+# Select PCAP
+# ---------------------------------
+- name: Select PCAP for processing
+  set_fact:
+    current_pcap: "{{ pcap_files.files[0].path }}"
+
+- name: Show selected PCAP
+  debug:
+    msg: "Selected PCAP for processing: {{ current_pcap }}"

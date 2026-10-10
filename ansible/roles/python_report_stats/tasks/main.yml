@@ -1,0 +1,25 @@
+---
+# ------------------------------------------
+# Verify report script exists
+# ------------------------------------------
+
+- name: Check report scripts exists
+  find:
+    paths: "{{ playbook_dir }}/../python_report_stats/"
+    patterns: stats-report.py
+  register: report_script
+
+- name: Fail if report script is missing
+  fail:
+    msg: "stats-report.py not found"
+  when: report_script.matched == 0
+
+# ------------------------------------------
+# Generate stats report
+# ------------------------------------------
+
+- name: Generate stats report
+  command: python3 {{ playbook_dir }}/../python_report_stats/stats-report.py
+  args:
+    chdir: "{{ playbook_dir }}/../python_report_stats/"
+  changed_when: true
