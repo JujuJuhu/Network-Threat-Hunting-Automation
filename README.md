@@ -112,13 +112,6 @@ ansible-playbook playbook.yml
 #   RESULTS/<pcap_name>/FINAL_REPORT.md
 ```
 
-## Running the Pipeline
-
-```bash
-cd ansible
-ansible-playbook playbook.yml
-```
-
 ---
 
 ## Outputs
