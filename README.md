@@ -1,3 +1,5 @@
+[![Watch the video](https://img.youtube.com/vi/maXVewChcpA/0.jpg)](https://youtu.be/maXVewChcpA)
+
 # Network Threat Hunting Pipeline
 
 Automated PCAP analysis pipeline using Ansible, Suricata, Zeek, and Python.  
