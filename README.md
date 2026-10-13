@@ -65,7 +65,7 @@ PCAPS/
 │   ├── alerts_report.md
 │   ├── stats_report.md
 │   └── FINAL_REPORT.md
-└── PCAPS/
+└── TODO/
     └── *.pcap                     ← gitignored
 ```
 
@@ -110,7 +110,7 @@ pip3 install geoip2
 ## Usage
 
 ```bash
-# Drop a PCAP in the PCAPS/ folder, then:
+# Drop a PCAP in the PCAPS/TODO folder, then:
 cd ansible
 ansible-playbook playbook.yml
 
