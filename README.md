@@ -92,6 +92,7 @@ Install dependencies in this order before running the pipeline.
 ```bash
 # Suricata v8.0+
 Suricata is the IDS engine that reads PCAP files and produces eve.json alert events.
+
 # Add OISF stable PPA (Ubuntu/Debian)
 sudo add-apt-repository ppa:oisf/suricata-stable -y
 sudo apt update
@@ -111,6 +112,7 @@ suricata -V
 ```bash
 # Zeek v9.0+
 Zeek is the Network Security Monitor that captures full protocol context — conn, dns, http, ssl, files, and weird logs — alongside Suricata alerts.
+
 # Add Zeek repository (Ubuntu 22.04 — adjust xUbuntu_XX.04 for your version)
 echo "deb http://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/ /" \
   | sudo tee /etc/apt/sources.list.d/zeek.list
@@ -159,6 +161,7 @@ python3 -c "import geoip2; print(geoip2.__version__)"
 ```bash
 # GeoLite2 Databases (MaxMind)
 Two offline databases map IPs to country, city, ASN, and organization. Free account required: https://www.maxmind.com/en/geolite2/signup
+
 # Create the directory the pipeline expects
 sudo mkdir -p /opt/geoip
 
@@ -173,8 +176,8 @@ sudo mv GeoLite2-City.mmdb /opt/geoip/
 ls /opt/geoip/
 ```
 
+## Clone
 ```bash
-# Clone
 git clone https://github.com/JujuJuhu/Network-Threat-Hunting-Automation.git
 cd PCAPS/
 
