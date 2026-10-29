@@ -1,4 +1,8 @@
-[![Watch the video](https://img.youtube.com/vi/maXVewChcpA/0.jpg)](https://youtu.be/maXVewChcpA)
+## Presentation
+
+![PCAP Threat Hunt Pipeline](docs/pcap-deck-slides.gif)
+
+📊 [Download slide deck (.pptx)](docs/PCAP_Threat_Hunt_Pipeline.pptx)
 
 # Network Threat Hunting Pipeline
 
@@ -82,11 +86,6 @@ PCAPS/
 | MaxMind GeoLite2 | Any | ASN, Country, City `.mmdb` at `/opt/geoip/` |
 
 ---
-## Presentation
-
-![PCAP Threat Hunt Pipeline](docs/pcap-deck-slides.gif)
-
-📊 [Download slide deck (.pptx)](docs/PCAP_Threat_Hunt_Pipeline.pptx)
 
 ## Installation
 Install dependencies in this order before running the pipeline.
@@ -222,6 +221,8 @@ ansible-playbook playbook.yml
 | `join-reports.py` | `stats_report.md` + `alerts_report.md` | `FINAL_REPORT.md` |
 
 ---
+
+[![Watch the video](https://img.youtube.com/vi/maXVewChcpA/0.jpg)](https://youtu.be/maXVewChcpA)
 
 ## Tool Versions (tested)
 
