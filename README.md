@@ -1,4 +1,8 @@
+## Presentation
 
+![PCAP Threat Hunt Pipeline](docs/pcap-deck-slides.gif)
+
+📊 [Download slide deck (.pptx)](docs/PCAP_Threat_Hunt_Pipeline.pptx)
 
 # Network Threat Hunting Pipeline
 
