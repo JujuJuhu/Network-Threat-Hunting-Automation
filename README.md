@@ -84,6 +84,91 @@ PCAPS/
 ---
 
 ## Installation
+Install dependencies in this order before running the pipeline.
+
+```bash
+# Suricata v8.0+
+Suricata is the IDS engine that reads PCAP files and produces eve.json alert events.
+# Add OISF stable PPA (Ubuntu/Debian)
+sudo add-apt-repository ppa:oisf/suricata-stable -y
+sudo apt update
+sudo apt install suricata -y
+
+# Update rulesets (ET Open is included by default)
+sudo suricata-update
+
+# Enable service
+sudo systemctl enable suricata
+
+# Verify
+suricata -V
+# Expected: Suricata version 8.x.x RELEASE
+```
+
+```bash
+# Zeek v9.0+
+Zeek is the Network Security Monitor that captures full protocol context — conn, dns, http, ssl, files, and weird logs — alongside Suricata alerts.
+# Add Zeek repository (Ubuntu 22.04 — adjust xUbuntu_XX.04 for your version)
+echo "deb http://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/ /" \
+  | sudo tee /etc/apt/sources.list.d/zeek.list
+
+# Import GPG key
+curl -fsSL https://download.opensuse.org/repositories/security:/zeek/xUbuntu_22.04/Release.key \
+  | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zeek.gpg > /dev/null
+
+sudo apt update
+sudo apt install zeek -y
+
+# Add Zeek to PATH
+echo 'export PATH=$PATH:/opt/zeek/bin' >> ~/.bashrc
+source ~/.bashrc
+
+# Verify
+zeek --version
+# Expected: Zeek version 9.x.x
+```
+
+```bash
+# Ansible v2.17+
+Ansible orchestrates the full 9-role pipeline.
+
+sudo apt update
+sudo apt install software-properties-common -y
+sudo add-apt-repository ppa:ansible/ansible -y
+sudo apt install ansible -y
+
+# Verify
+ansible --version
+# Expected: ansible [core 2.17.x]
+```
+
+```bash
+# Python 3.10+ and geoip2
+# Confirm Python version
+python3 --version
+
+# Install geoip2
+pip3 install geoip2
+
+# Verify
+python3 -c "import geoip2; print(geoip2.__version__)"
+```
+```bash
+# GeoLite2 Databases (MaxMind)
+Two offline databases map IPs to country, city, ASN, and organization. Free account required: https://www.maxmind.com/en/geolite2/signup
+# Create the directory the pipeline expects
+sudo mkdir -p /opt/geoip
+
+# Download from MaxMind (My Account → Download Files):
+#   GeoLite2-ASN.mmdb
+#   GeoLite2-City.mmdb
+
+sudo mv GeoLite2-ASN.mmdb  /opt/geoip/
+sudo mv GeoLite2-City.mmdb /opt/geoip/
+
+# Verify
+ls /opt/geoip/
+```
 
 ```bash
 # Clone
@@ -92,17 +177,6 @@ cd PCAPS/
 
 # Create required directories
 mkdir -p PCAPS/TODO PCAPS/DONE PCAPS/LOGS PCAPS/RESULTS
-
-# Install Python dependency (system or venv)
-pip3 install geoip2
-
-# Download MaxMind GeoLite2 databases (free account required)
-# https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
-# Place at:
-#   /opt/geoip/GeoLite2-ASN.mmdb
-#   /opt/geoip/GeoLite2-Country.mmdb
-#   /opt/geoip/GeoLite2-City.mmdb
-
 ```
 
 ---
