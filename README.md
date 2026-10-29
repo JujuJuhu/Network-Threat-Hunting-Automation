@@ -82,6 +82,11 @@ PCAPS/
 | MaxMind GeoLite2 | Any | ASN, Country, City `.mmdb` at `/opt/geoip/` |
 
 ---
+## Presentation
+
+![PCAP Threat Hunt Pipeline](docs/pcap-deck-slides.gif)
+
+📊 [Download slide deck (.pptx)](docs/PCAP_Threat_Hunt_Pipeline.pptx)
 
 ## Installation
 Install dependencies in this order before running the pipeline.
